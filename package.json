@@ -1,7 +1,8 @@
 {
-  "name": "duplicity-wrapper",
+  "name": "restic-orchestrator",
   "version": "1.0.0",
   "description": "an orchestrator for restic backups on multiple hosts",
+  "repository": "https://github.com/datenknoten/restic-orchestrator",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,7 +20,9 @@
     "appdirectory": "0.1.0",
     "caporal": "0.8.0",
     "fs-extra": "4.0.2",
-    "winston": "2.4.0"
+    "winston": "2.4.0",
+    "typescript-json-schema": "0.20.0",
+    "ajv": "5.5.0"
   },
   "devDependencies": {
     "@types/node": "8.0.53",

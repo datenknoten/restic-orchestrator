@@ -6,12 +6,19 @@ import * as path from 'path';
 import _caporal from 'caporal';
 const appDirectory = require('appdirectory');
 
+
+
 /** Own Code */
 import {ConfigInterface} from './interfaces';
 import {
     ConfigFileNotFoundError,
+    ConfigFileEmptyError,
+    ConfigFileInvalidError,
+    InvalidJSONSchemaError,
     ReturnCodes,
 } from './errors';
+
+import { ConfigModel } from './models';
 
 /** Caporal typing setup */
 type caporalClass = typeof _caporal;
@@ -27,18 +34,17 @@ interface ArgType {
 const logger = winston.cli();
 logger.level = 'info';
 
-/** appdirectory config */
-const dirs = new appDirectory({
-    appName: 'restic-orchestrator',
-    appAuthor: 'datenknoten',
-    useRoaming: true,
-});
 
 /**
  * Parses the supplied arguments and returns them
  */
 async function getArgs (): Promise<ArgType> {
     return new Promise<ArgType>((resolve) => {
+        const dirs = new appDirectory({
+            appName: 'restic-orchestrator',
+            appAuthor: 'datenknoten',
+            useRoaming: true,
+        });
         caporal
             .version('1.0.0')
             .description('an orchestrator for restic backups on multiple hosts')
@@ -54,20 +60,6 @@ async function getArgs (): Promise<ArgType> {
     });
 }
 
-/**
- * Loads the config from configuration file and returns it
- */
-async function getConfig (configFile?: string): Promise<ConfigInterface[]> {
-    if (!configFile) {
-        configFile = path.join(dirs.userData(), 'config.json');
-    }
-    if (!(await fse.pathExists(configFile))) {
-        throw new ConfigFileNotFoundError();
-    }
-    console.dir(dirs.userData());
-    return [];
-}
-
 // tslint:disable-next-line:no-floating-promises
 (async () => {
     try {
@@ -75,13 +67,21 @@ async function getConfig (configFile?: string): Promise<ConfigInterface[]> {
         if (args && args.type && args.type === 'incr') {
             args.type = 'incremental';
         }
-        const config = await getConfig(args.config);
+        const config = await ConfigModel.getConfig(args.config);
         console.dir(config);
         process.exit(ReturnCodes.Success);
     } catch (error) {
         if (error instanceof ConfigFileNotFoundError) {
             logger.error('Could not find a valid logfile');
             process.exit(ReturnCodes.ConfigFileNotFound);
+        } else if (error instanceof ConfigFileEmptyError) {
+            logger.error('Config file is empty');
+            process.exit(ReturnCodes.ConfigFileEmpty);
+        } else if (error instanceof ConfigFileInvalidError) {
+            logger.error('Config file did not pass validation', {
+                reason: error.reason,
+            });
+            process.exit(ReturnCodes.ConfigFileInvalid);
         } else {
             logger.error('An uncatched error happened ☹', {
                 error: (error.stack ? error.stack : error),

@@ -6,8 +6,6 @@ import * as path from 'path';
 import _caporal from 'caporal';
 const appDirectory = require('appdirectory');
 
-
-
 /** Own Code */
 import {ConfigInterface} from './interfaces';
 import {
@@ -38,7 +36,7 @@ logger.level = 'info';
 /**
  * Parses the supplied arguments and returns them
  */
-async function getArgs (): Promise<ArgType> {
+async function getArgs(): Promise<ArgType> {
     return new Promise<ArgType>((resolve) => {
         const dirs = new appDirectory({
             appName: 'restic-orchestrator',

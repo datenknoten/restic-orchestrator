@@ -47,7 +47,8 @@ export class ConfigModel implements ConfigInterface {
     /**
      * Returns the config schema
      */
-    public static getConfigSchema (): any {
+    // tslint:disable-next-line:no-any
+    public static getConfigSchema(): any {
         const settings: TJS.PartialArgs = {
             required: true,
         };
@@ -70,7 +71,7 @@ export class ConfigModel implements ConfigInterface {
     /**
  * Loads the config from configuration file and returns it
  */
-    public static async getConfig (configFilePath?: string): Promise<ConfigModel[]> {
+    public static async getConfig(configFilePath?: string): Promise<ConfigModel[]> {
         if (!configFilePath) {
             const dirs = new appDirectory({
                 appName: 'restic-orchestrator',

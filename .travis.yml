@@ -9,6 +9,7 @@ cache:
 
 install:
   - npm install
+  - cp monkey-patch/caporal/index.d.ts node_modules/caporal/index.d.ts
 
 script:
   - npm run lint

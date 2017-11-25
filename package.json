@@ -1,6 +1,6 @@
 {
   "name": "restic-orchestrator",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "an orchestrator for restic backups on multiple hosts",
   "repository": "https://github.com/datenknoten/restic-orchestrator",
   "main": "src/index.ts",
@@ -9,7 +9,7 @@
     "lint": "tslint -p tsconfig.json",
     "start": "ts-node src/main.ts",
     "compile": "tsc -p tsconfig.json",
-    "build": "cd dist && nexe main.js",
+    "build": "cd dist && nexe --output restic-orchestrator main.js",
     "generate-config-schema": "ts-node src/generate-config-schema.ts"
   },
   "keywords": [

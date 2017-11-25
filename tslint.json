@@ -85,6 +85,10 @@
         ],
         "completed-docs": [
             true
-        ]
+        ],
+        "no-console": [
+            true
+        ],
+        "no-debugger": [true]
     }
 }

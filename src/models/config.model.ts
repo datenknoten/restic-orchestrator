@@ -11,7 +11,7 @@ import * as Ajv from 'ajv';
 /**
  * Own imports
  */
-import {ConfigInterface} from '../interfaces';
+import {ConfigInterface, EnvironmentInterface} from '../interfaces';
 import {
     InvalidJSONSchemaError,
     ConfigFileEmptyError,
@@ -23,6 +23,26 @@ import {
  * A model of a configuration
  */
 export class ConfigModel implements ConfigInterface {
+    /**
+     * Password for the backup encryption
+     */
+    backupPassword: string;
+    /**
+     * Where the backup is stored
+     */
+    repository: string;
+    /**
+     * What should be backuped
+     */
+    files: string[];
+    /**
+     * Exclude files
+     */
+    exclude?: string[];
+    /**
+     * Additional env vars, for cloud storage for example
+     */
+    env?: EnvironmentInterface;
     /**
      * The user to SSH into the host
      */
@@ -112,15 +132,21 @@ export class ConfigModel implements ConfigInterface {
                     if (ajv.errors) {
                         error.reason = ajv.errors;
                     }
-                    console.dir(ajv.errors);
                     throw error;
                 }
                 const configItem = new ConfigModel();
-                configItem.host = item.host;
-                configItem.needsSudo = item.needsSudo;
-                configItem.postCommand = item.postCommand;
-                configItem.preCommand = item.preCommand;
                 configItem.user = item.user;
+                configItem.needsSudo = item.needsSudo;
+                configItem.host = item.host;
+
+                configItem.backupPassword = item.backupPassword;
+                configItem.repository = item.repository;
+                configItem.files = item.files;
+                configItem.exclude = item.exclude;
+                configItem.env = item.env;
+
+                configItem.preCommand = item.preCommand;
+                configItem.postCommand = item.postCommand;
                 returnValue.push(configItem);
             }
         } catch (e) {
@@ -131,7 +157,6 @@ export class ConfigModel implements ConfigInterface {
                 error.reason = e.message;
                 throw error;
             } else {
-                console.dir(e);
                 throw new ConfigFileInvalidError();
             }
         }

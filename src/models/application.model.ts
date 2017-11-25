@@ -1,21 +1,21 @@
 /** Third Party imports */
-import * as fse from 'fs-extra';
 import * as winston from 'winston';
 import * as path from 'path';
 import _caporal from 'caporal';
 const appDirectory = require('appdirectory');
 
 /** Own Code */
-import {ConfigInterface} from '../interfaces';
 import {
     ConfigFileNotFoundError,
     ConfigFileEmptyError,
     ConfigFileInvalidError,
-    InvalidJSONSchemaError,
     ReturnCodes,
 } from '../errors';
 
-import {ConfigModel} from '../models';
+import {
+    ConfigModel,
+    HostModel,
+} from '../models';
 
 /** Caporal typing setup */
 type caporalClass = typeof _caporal;
@@ -43,7 +43,7 @@ export class ApplicationModel {
     /**
      * Parses the supplied arguments and returns them
      */
-    async getArgs (): Promise<ArgType> {
+    public async getArgs(): Promise<ArgType> {
         return new Promise<ArgType>((resolve) => {
             const dirs = new appDirectory({
                 appName: 'restic-orchestrator',
@@ -68,14 +68,21 @@ export class ApplicationModel {
     /**
      * Run the application
      */
-    public async run () {
+    public async run() {
         try {
             const args = await this.getArgs();
             if (args && args.type && args.type === 'incr') {
                 args.type = 'incremental';
             }
             const config = await ConfigModel.getConfig(args.config);
-            console.dir(config);
+            if (config.length > 0) {
+                for (const item of config) {
+                    const host = new HostModel(item, this);
+                    await host.preRun();
+                    await host.run();
+                    await host.postRun();
+                }
+            }
             process.exit(ReturnCodes.Success);
         } catch (error) {
             if (error instanceof ConfigFileNotFoundError) {

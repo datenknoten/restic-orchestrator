@@ -68,23 +68,35 @@ export class ConfigModel implements ConfigInterface {
      * Returns the config schema
      */
     // tslint:disable-next-line:no-any
-    public static getConfigSchema(): any {
-        const settings: TJS.PartialArgs = {
-            required: true,
-        };
+    public static async getConfigSchema(): Promise<any> {
+        const interfaceFile = path.resolve(__dirname, '..', 'interfaces', 'config.interface.ts');
+        if (await fse.pathExists(interfaceFile)) {
+            const settings: TJS.PartialArgs = {
+                required: true,
+            };
 
-        const compilerOptions: TJS.CompilerOptions = {
-            strictNullChecks: true,
-        };
+            const compilerOptions: TJS.CompilerOptions = {
+                strictNullChecks: true,
+            };
 
-        const program = TJS.getProgramFromFiles([path.resolve(__dirname, '..', 'interfaces', 'config.interface.ts')], compilerOptions);
+            const program = TJS.getProgramFromFiles([interfaceFile], compilerOptions);
 
-        const schema = TJS.generateSchema(program, 'ConfigInterface', settings);
+            const schema = TJS.generateSchema(program, 'ConfigInterface', settings);
 
-        if (schema) {
-            return schema;
+            if (schema) {
+                return schema;
+            } else {
+                throw new InvalidJSONSchemaError();
+            }
         } else {
-            throw new InvalidJSONSchemaError();
+            const schemaFile = path.resolve(__dirname, '..', 'schema', 'config.schema.json');
+            if (await fse.pathExists(schemaFile)) {
+                const schemaContent = await fse.readFile(schemaFile, 'utf-8');
+                const schema = JSON.parse(schemaContent);
+                return schema;
+            } else {
+                throw new InvalidJSONSchemaError();
+            }
         }
     }
 
@@ -111,7 +123,7 @@ export class ConfigModel implements ConfigInterface {
 
         let config: ConfigInterface[] = [];
 
-        const configSchema = ConfigModel.getConfigSchema();
+        const configSchema = await ConfigModel.getConfigSchema();
 
         delete configSchema['$schema'];
 

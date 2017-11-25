@@ -13,6 +13,7 @@ script:
 - mkdir -p dist/schema
 - npm run generate-config-schema
 - npm run build
+- ls -lah dist
 
 deploy:
   provider: releases

@@ -2,6 +2,7 @@ import {
     EnvironmentInterface,
     ExecutorResultInterface,
 } from '../interfaces';
+import { ApplicationModel } from '../models';
 import {exec as _exec} from 'child_process';
 import * as util from 'util';
 
@@ -11,6 +12,10 @@ const exec = util.promisify(_exec);
  * The class that runs the actual remote commands
  */
 export abstract class ExecutorHelper {
+    /**
+     * The core application
+     */
+    public static application: ApplicationModel;
     /**
      * Run a command on a remote host
      */
@@ -47,6 +52,9 @@ export abstract class ExecutorHelper {
      * The internal command runner
      */
     private static async _run(command: string): Promise<ExecutorResultInterface> {
+        ExecutorHelper.application.getLogger().debug('[ExecutorHelper->_run] command', {
+            command,
+        });
         const returnValue: ExecutorResultInterface = {
             returnCode: 0,
             stdout: '',
@@ -64,7 +72,9 @@ export abstract class ExecutorHelper {
                 returnValue.returnCode = 1;
             }
         }
-
+        ExecutorHelper.application.getLogger().debug('[ExecutorHelper->_run] returnValue', {
+            returnValue,
+        });
         return returnValue;
     }
 }

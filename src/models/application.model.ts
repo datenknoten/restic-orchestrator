@@ -18,6 +18,10 @@ import {
     HostModel,
 } from '../models';
 
+import {
+    ExecutorHelper,
+} from '../helpers';
+
 /** Caporal typing setup */
 type caporalClass = typeof _caporal;
 const caporal: caporalClass = require('caporal');
@@ -32,13 +36,21 @@ interface ArgType {
  */
 export class ApplicationModel {
     /**
+     * The internal reference to the logger
+     */
+    private logger: winston.LoggerInstance;
+
+    /**
      * Return a logger
      */
     public getLogger(): winston.LoggerInstance {
-        const logger = winston.cli();
-        logger.level = 'info';
+        return this.logger;
+    }
 
-        return logger;
+    constructor() {
+        this.logger = winston.cli();
+        this.logger.level = 'info';
+        ExecutorHelper.application = this;
     }
 
     /**
@@ -54,9 +66,9 @@ export class ApplicationModel {
             caporal
                 .version('1.0.0')
                 .description('an orchestrator for restic backups on multiple hosts')
-                .argument('[type]', 'The type of backup, full or incremental', ['full', 'incr', 'incremental'], 'incr')
                 .option('--dry-run', 'Do not run restic, just print the command')
                 .option('--config', `Specify another config file. Default is ${path.join(dirs.userData(), 'config.json')}`)
+                .option('--verbose', 'Set the logger to debug')
                 .action((args, options, _logger) => {
                     args.dryRun = !!options.dryRun;
                     resolve(args);
@@ -72,8 +84,10 @@ export class ApplicationModel {
     public async run() {
         try {
             const args = await this.getArgs();
-            if (args && args.type && args.type === 'incr') {
-                args.type = 'incremental';
+            if (args) {
+                if (args.verbose) {
+                    this.logger.level = 'debug';
+                }
             }
             const config = await ConfigModel.getConfig(args.config);
             if (config.length > 0) {

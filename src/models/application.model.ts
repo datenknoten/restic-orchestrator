@@ -97,8 +97,19 @@ export class ApplicationModel {
                 });
                 process.exit(ReturnCodes.ConfigFileInvalid);
             } else {
+                let _error;
+                if (typeof error === 'string') {
+                    _error = error;
+                } else {
+                    _error = {
+                        stack: error.stack,
+                        name: error.name,
+                        message: error.message,
+                        constr: error.constructor.name,
+                    };
+                }
                 this.getLogger().error('An uncatched error happened ☹', {
-                    error: (error.stack ? error.stack : error),
+                    error: _error,
                 });
                 process.exit(ReturnCodes.GenericError);
             }

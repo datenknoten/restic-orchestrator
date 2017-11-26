@@ -26,9 +26,9 @@ script:
 - mkdir -p dist/schema
 - npm run generate-config-schema
 - npm run build
-- strip -s dist/restic-orchestrator
-- chmod u+x dist/restic-orchestrator
-- upx -9 dist/restic-orchestrator
+- strip -s ~/.nexe/*
+- upx -9 ~/.nexe/*
+- npm run build
 
 deploy:
   provider: releases

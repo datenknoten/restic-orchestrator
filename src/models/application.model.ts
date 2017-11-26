@@ -71,6 +71,7 @@ export class ApplicationModel {
                 .option('--verbose', 'Set the logger to debug')
                 .action((args, options, _logger) => {
                     args.dryRun = !!options.dryRun;
+                    args.verbose = !!options.verbose;
                     resolve(args);
                 });
 

@@ -17,7 +17,7 @@ stages:
   - test
   - name: build
     if: tag IS present
-    deploy:
+    deploy: &releases
       provider: releases
       skip_cleanup: true
       api_key:

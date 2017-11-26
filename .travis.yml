@@ -1,12 +1,20 @@
 language: node_js
+
 node_js:
 - '8'
+
 cache:
   directories:
   - node_modules
+
+env:
+  global:
+    - secure: "VY7YwITZ9+XeKkt4gO4L5abzzPsnMntoxzNrkDE/OdE3CXujpa/3MutArWuS2BZVPr9mu745gF8Ur4UsJZn0h5c9mhD/6fvFlLKQ6YG9g/YT8PNgQzpMC72TRJubds5cGRlSSy7u+3C5zkr1nsFnprOMjStrkiJNMvsRAdUlt1o/98rRj8Pyd01kizyO6SegrK/dYZhAZpVUjy3QnOuMZXVx8kmHZFekYnkxuM6rMZckAph1VjhJw3B7l3mzeBdqMtxBLUdwTK+NxyqNHc2exw/AjxtzLZfkm0tq7bxfEr7VE1P3CJLLMsIXjyb1s3XVnwjsb7AA/p0T0wXO9+AMvEK27Cnq6zzb5PpsHBfkJrPAjgPIdc9rhN+V3sFJxlHq3Uc1b1bS7UWlBwCQp9QWyp5m1HC+0Ah2CiuBzHV3ejv1ozLQ/uS3SpRMWKYyuu4PrVqERqsS6fexfrgu5JHYR070vErTfYGwIizbj4DFVpyvj2ZrSBlEl0NZ7E9Su31zTxx1c9S/U9NqjEVmVvDNUwL+aAdPquwmwGhrSqxJoTNeezcdzhl7FZxlm0l1gdi+9zFfhV14c6xqslFHv07AKQ0DnONcapdJesEZwqXyXu3Um7PEN+MrZMOKcfIo7aXt7DHSJzzhjcnACOP8Wq7yj/XTgcTYTBuw+F6Q2cKDjfo="
+
 install:
 - npm install
 - cp monkey-patch/caporal/index.d.ts node_modules/caporal/index.d.ts
+
 script:
 - npm run lint
 - npm run compile

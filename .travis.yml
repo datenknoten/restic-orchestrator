@@ -22,6 +22,7 @@ script:
 - mkdir -p dist/schema
 - npm run generate-config-schema
 - npm run build
+- strip -s dist/restic-orchestrator
 
 deploy:
   provider: releases

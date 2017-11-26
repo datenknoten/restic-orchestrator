@@ -43,7 +43,7 @@ jobs:
       script:
         - sudo apt-get -qq update
         - sudo apt-get install -y upx-ucl
-        - npm install --global modclean
+        - npm install --global modclean nexe
         - npm prune --production
         - modclean --run
         - npm run build

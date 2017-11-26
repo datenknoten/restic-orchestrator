@@ -55,7 +55,7 @@ export class HostModel {
         const command: string[] = [
             '/usr/local/bin/restic',
             `--password-file /tmp/backup-password`,
-            `--repository ${this.config.repository}`,
+            `--repo ${this.config.repository}`,
             'backup',
         ];
         if (this.config.exclude && (this.config.exclude.length > 0)) {

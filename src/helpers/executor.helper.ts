@@ -2,7 +2,10 @@ import {
     EnvironmentInterface,
     ExecutorResultInterface,
 } from '../interfaces';
-import * as shell from 'shelljs';
+import {exec as _exec} from 'child_process';
+import * as util from 'util';
+
+const exec = util.promisify(_exec);
 
 /**
  * The class that runs the actual remote commands
@@ -44,18 +47,24 @@ export abstract class ExecutorHelper {
      * The internal command runner
      */
     private static async _run(command: string): Promise<ExecutorResultInterface> {
-        return new Promise<ExecutorResultInterface>((resolve) => {
-            shell.exec(command, {
-                async: true,
-                silent: true,
-                shell: '/bin/bash',
-            }, (code: number, stdout: string, stderr: string) => {
-                resolve({
-                    returnCode: code,
-                    stdout,
-                    stderr,
-                });
-            });
-        });
+        const returnValue: ExecutorResultInterface = {
+            returnCode: 0,
+            stdout: '',
+            stderr: '',
+        };
+
+        try {
+            const results = await exec(command);
+            returnValue.stdout = results.stdout;
+            returnValue.stderr = results.stderr;
+        } catch (error) {
+            if (error.code) {
+                returnValue.returnCode = error.code;
+            } else {
+                returnValue.returnCode = 1;
+            }
+        }
+
+        return returnValue;
     }
 }

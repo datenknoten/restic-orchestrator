@@ -9,6 +9,7 @@ import {
     ConfigFileNotFoundError,
     ConfigFileEmptyError,
     ConfigFileInvalidError,
+    InvalidJSONSchemaError,
     ReturnCodes,
 } from '../errors';
 
@@ -96,6 +97,9 @@ export class ApplicationModel {
                     reason: error.reason,
                 });
                 process.exit(ReturnCodes.ConfigFileInvalid);
+            } else if (error instanceof InvalidJSONSchemaError) {
+                this.getLogger().error('The supplied JSON schema is invalid');
+                process.exit(ReturnCodes.InvalidJSONSchema);
             } else {
                 let _error;
                 if (typeof error === 'string') {

@@ -48,12 +48,12 @@ export class HostModel {
     public async run() {
         await ExecutorHelper.run(
             this.config.host,
-            `/usr/bin/install -m 600 /dev/null /tmp/backup-password && echo '${this.config.backupPassword}' >> /tmp/backup-password`,
+            `/usr/bin/install -m 600 /dev/null /tmp/backup-password && echo ${this.config.backupPassword} >> /tmp/backup-password`,
             this.config.user,
         );
 
         const command: string[] = [
-            '/usr/lobal/bin/restic',
+            '/usr/local/bin/restic',
             `--password-file /tmp/backup-password`,
             `--repository ${this.config.repository}`,
             'backup',

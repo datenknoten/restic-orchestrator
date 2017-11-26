@@ -12,6 +12,10 @@ env:
   global:
     - secure: "kdDR9t0ro61s3SR0MCqGoEMIqWQd2P4UGw/6sZz44hC5ZrvrdEiKcXKVgizaT6ZTBj92tIqFYPKF4iSoiXyPasvlb4wXabfaVzTGrM4/1V4If+oJNq/82vQD88Zw5htXqSSvNSNhrkUGPKCxSDbkzKdiaD1qg6xtRyeenOr7E9m1saMlJ382Es0BxAuUrqV1BF3FvUtjXyfIaPZXiC33yTQ5GSlZl+mb1+mjHWAaPBGq/8p4qTe1HBMxcxId79nzXIK0Pey+brWaSxkaKb1wMtQGO88vlf9TPovHgVQ3R803RIBl/TENWy66PYXv9B7TND5N1UcZlFeNsp164JHhMdLK+2jV1zMDWRbp91rQOWBGymd9cUGOk5UonRVBCMzhIaUuZUVKtAZ+JRAISLejT7ChnZtmY2f1aF7Sg8PuQj+W3VP6Ept6xnMkyLPH/VVlLiGy/D1pOwVudrEynTUHkzPDepS27Whf4hFhURFNkEPUQOD2ONKfdbCRxj2ac0jHg3o9MPlx+pzCE2Gji2scTg/fcGDmjkknf45zMD1DeyuaE7raQOFtVat6s/B8zhSA/epPETAU4n3P8y7bcbZsxVCgUcHIK4BZX4hS4j6isF0rESTrgex2vs3OhyapId1tua/xjWzlZJAcckWKrJLJwGkbw9zV4UuITIl2woVxRmY="
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y upx-ucl
+
 install:
 - npm install
 - cp monkey-patch/caporal/index.d.ts node_modules/caporal/index.d.ts
@@ -23,6 +27,8 @@ script:
 - npm run generate-config-schema
 - npm run build
 - strip -s dist/restic-orchestrator
+- chmod u+x dist/restic-orchestrator
+- upx -9 dist/restic-orchestrator
 
 deploy:
   provider: releases

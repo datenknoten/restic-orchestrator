@@ -35,8 +35,7 @@ jobs:
         - sudo apt-get -qq update
         - sudo apt-get install -y upx-ucl
         - npm install --global modclean
-        - rm -Rf node_modules
-        - npm install --production
+        - npm prune --production
         - modclean --run
         - npm run build
         - chmod u+x ~/.nexe/*

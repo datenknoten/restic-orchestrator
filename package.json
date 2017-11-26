@@ -1,6 +1,6 @@
 {
   "name": "restic-orchestrator",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "an orchestrator for restic backups on multiple hosts",
   "repository": "https://github.com/datenknoten/restic-orchestrator",
   "main": "src/index.ts",

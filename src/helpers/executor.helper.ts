@@ -1,8 +1,8 @@
 import {
-    EnvironmentInterface,
     ExecutorResultInterface,
 } from '../interfaces';
 import { ApplicationModel } from '../models';
+import { CommandBuilder } from '../helpers';
 import {exec as _exec} from 'child_process';
 import * as util from 'util';
 
@@ -24,27 +24,32 @@ export abstract class ExecutorHelper {
         command: string,
         user?: string,
         needsSudo?: boolean,
-        env?: EnvironmentInterface,
     ) {
-        const commandParts: string[] = ['ssh'];
+        const ssh = new CommandBuilder();
+        ssh.command = 'ssh';
         if (user) {
-            commandParts.push(`-l ${user}`);
+            ssh.options.push({
+                name: '-l',
+                value: user,
+                useEqualSign: false,
+            });
         }
-        commandParts.push(host);
-        commandParts.push('"');
-        if (env && (Object.keys(env).length > 0)) {
-            for (const key of Object.keys(env)) {
-                commandParts.push(`${key}=${env[key]}`);
-            }
-        }
+
+        ssh.arguments.push(host);
+
         if (needsSudo) {
-            commandParts.push('/usr/bin/sudo -E');
+            const sudo = new CommandBuilder();
+            sudo.command = '/usr/bin/usdo';
+            sudo.options.push({
+                name: '--preserve-env',
+            });
+            sudo.arguments.push(command);
+            ssh.arguments.push(sudo.render());
+        } else {
+            ssh.arguments.push(command);
         }
-        commandParts.push(command);
 
-        commandParts.push('"');
-
-        const executeCommand = commandParts.join(' ');
+        const executeCommand = ssh.render();
         return ExecutorHelper._run(executeCommand);
     }
 

@@ -5,7 +5,7 @@
   "repository": "https://github.com/datenknoten/restic-orchestrator",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "lint": "tslint -p tsconfig.json",
     "start": "ts-node src/main.ts",
     "compile": "tsc -p tsconfig.json",
@@ -32,9 +32,13 @@
     "@types/node": "8.0.53",
     "@types/winston": "2.3.7",
     "@types/fs-extra": "4.0.5",
+    "@types/chai": "4.0.6",
+    "@types/mocha": "2.2.44",
     "typescript": "2.6.1",
     "ts-node": "3.3.0",
     "tslint": "5.8.0",
-    "nexe": "2.0.0-rc.22"
+    "nexe": "2.0.0-rc.22",
+    "chai": "4.1.2",
+    "mocha": "4.0.1"
   }
 }

@@ -66,6 +66,7 @@ export class ApplicationModel {
             caporal
                 .version('1.0.0')
                 .description('an orchestrator for restic backups on multiple hosts')
+                .argument('command', 'Run specific command. Allowed values are: init, backup', ['init', 'backup'], 'backup')
                 .option('--dry-run', 'Do not run restic, just print the command')
                 .option('--config', `Specify another config file. Default is ${path.join(dirs.userData(), 'config.json')}`)
                 .option('--verbose', 'Set the logger to debug')
@@ -94,9 +95,11 @@ export class ApplicationModel {
             if (config.length > 0) {
                 for (const item of config) {
                     const host = new HostModel(item, this);
-                    await host.preRun();
-                    await host.run();
-                    await host.postRun();
+                    if (args.command === 'backup') {
+                        await host.preRun();
+                        await host.run();
+                        await host.postRun();
+                    }
                 }
             }
             process.exit(ReturnCodes.Success);

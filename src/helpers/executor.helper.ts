@@ -1,8 +1,8 @@
 import {
     ExecutorResultInterface,
 } from '../interfaces';
-import { ApplicationModel } from '../models';
-import { CommandBuilder } from '../helpers';
+import {ApplicationModel} from '../models';
+import {CommandBuilder} from '../helpers';
 import {exec as _exec} from 'child_process';
 import * as util from 'util';
 
@@ -23,7 +23,6 @@ export abstract class ExecutorHelper {
         host: string,
         command: string,
         user?: string,
-        needsSudo?: boolean,
     ) {
         const ssh = new CommandBuilder();
         ssh.command = 'ssh';
@@ -37,17 +36,7 @@ export abstract class ExecutorHelper {
 
         ssh.arguments.push(host);
 
-        if (needsSudo) {
-            const sudo = new CommandBuilder();
-            sudo.command = '/usr/bin/usdo';
-            sudo.options.push({
-                name: '--preserve-env',
-            });
-            sudo.arguments.push(command);
-            ssh.arguments.push(sudo.render());
-        } else {
-            ssh.arguments.push(command);
-        }
+        ssh.arguments.push(command);
 
         const executeCommand = ssh.render();
         return ExecutorHelper._run(executeCommand);

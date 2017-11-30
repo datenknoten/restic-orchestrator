@@ -37,7 +37,6 @@ export class HostModel {
                 this.config.host,
                 this.config.preCommand,
                 this.config.user,
-                this.config.needsSudo,
             );
         }
     }
@@ -71,6 +70,7 @@ export class HostModel {
         await this.putPasswort();
 
         const restic = new CommandBuilder();
+        restic.hasSudo = this.config.needsSudo ? true : false;
         restic.command = '/usr/local/bin/restic';
         restic.options.push({
             name: '--password-file',
@@ -103,7 +103,6 @@ export class HostModel {
             this.config.host,
             restic.render(),
             this.config.user,
-            this.config.needsSudo,
         );
 
         await this.releasePassword();
@@ -118,7 +117,6 @@ export class HostModel {
                 this.config.host,
                 this.config.postCommand,
                 this.config.user,
-                this.config.needsSudo,
             );
         }
     }
@@ -130,6 +128,7 @@ export class HostModel {
         await this.putPasswort();
 
         const restic = new CommandBuilder();
+        restic.hasSudo = this.config.needsSudo ? true : false;
 
         restic.command = '/usr/local/bin/restic';
 
@@ -153,7 +152,6 @@ export class HostModel {
             this.config.host,
             restic.render(),
             this.config.user,
-            this.config.needsSudo,
         );
 
         await this.releasePassword();

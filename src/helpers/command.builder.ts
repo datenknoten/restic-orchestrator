@@ -15,6 +15,11 @@ export class CommandBuilder {
      * Optional environment variables
      */
     public env: EnvironmentInterface = {};
+
+    /**
+     * If the command needs to be run with sudo
+     */
+    public hasSudo: boolean = false;
     /**
      * Optional options for the command
      */
@@ -34,6 +39,10 @@ export class CommandBuilder {
             for (const key of Object.keys(this.env)) {
                 command += `${key}="${this.env[key].replace(/"/g, '\\"')}" `;
             }
+        }
+
+        if (this.hasSudo) {
+            command += '/usr/bin/sudo --preserve-env ';
         }
 
         command += this.command;

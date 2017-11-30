@@ -17,8 +17,6 @@ stages:
   - test
   - name: build
     if: tag IS present
-  - name: release
-    if: tag IS present
 
 jobs:
   include:
@@ -45,8 +43,6 @@ jobs:
         - strip -s ~/.nexe/*
         - upx -9 ~/.nexe/*
         - npm run build
-    - stage: release
-      script: echo "Deploying to GitHub releases ..."
       deploy:
         provider: releases
         skip_cleanup: true
@@ -55,6 +51,7 @@ jobs:
         file: dist/restic-orchestrator
         on:
           tags: true
+
 
 notifications:
     webhooks:

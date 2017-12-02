@@ -3,10 +3,8 @@ import {
 } from '../interfaces';
 import {ApplicationModel} from '../models';
 import {CommandBuilder} from '../helpers';
-import {exec as _exec} from 'child_process';
+import * as child_process from 'child_process';
 import * as util from 'util';
-
-const exec = util.promisify(_exec);
 
 /**
  * The class that runs the actual remote commands
@@ -46,6 +44,7 @@ export abstract class ExecutorHelper {
      * The internal command runner
      */
     private static async _run(command: string): Promise<ExecutorResultInterface> {
+        const exec = util.promisify(child_process.exec);
         ExecutorHelper.application.getLogger().debug('[ExecutorHelper->_run] command', {
             command,
         });

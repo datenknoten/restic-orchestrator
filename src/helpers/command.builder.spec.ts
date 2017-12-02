@@ -10,6 +10,14 @@ describe('CommandBuilder', () => {
         expect(result).to.equal('/usr/bin/node');
     });
 
+    it('should render a command with sudo', function() {
+        const builder = new CommandBuilder();
+        builder.command = '/usr/bin/node';
+        builder.hasSudo = true;
+        const result = builder.render();
+        expect(result).to.equal('/usr/bin/sudo --preserve-env /usr/bin/node');
+    });
+
     it('should render a command with options and no arguments', function() {
         const builder = new CommandBuilder();
         builder.command = '/usr/bin/node';

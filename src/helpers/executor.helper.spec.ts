@@ -5,8 +5,6 @@ import { expect } from 'chai';
 
 import * as child_process from 'child_process';
 
-let exec: sinon.SinonStub;
-
 import {ExecutorHelper} from '../helpers';
 import {ApplicationModel} from '../models';
 
@@ -15,25 +13,53 @@ describe('ExecutorHelper', function() {
     const application = new ApplicationModel();
     ExecutorHelper.application = application;
 
-    beforeEach(function() {
-        exec = sinon.stub(child_process, 'exec').callsFake((_arg, callback) => {
+    it('should execute without an error', async function() {
+        const exec = sinon.stub(child_process, 'exec').callsFake((_arg, callback) => {
             callback(undefined, {
                 stdout: 'foo',
                 stderr: 'bar',
             });
         });
-    });
 
-    afterEach(function() {
-        exec.restore();
-    });
-
-    it('should execute', async function() {
-        const returnValue = await ExecutorHelper.run('ssh-host', 'foobar', 'host');
+        const returnValue = await ExecutorHelper.run('ssh-host', 'foobar', 'user');
         expect(returnValue).to.be.an('object');
         expect(returnValue).to.have.property('returnCode', 0);
         expect(returnValue).to.have.property('stdout', 'foo');
         expect(returnValue).to.have.property('stderr', 'bar');
         expect(exec.callCount).to.be.equal(1);
+
+        exec.restore();
+    });
+
+    it('should execute with an specific error', async function() {
+        const exec = sinon.stub(child_process, 'exec').callsFake((_arg, callback) => {
+            callback({ code: 2}, {
+                stdout: 'foo',
+                stderr: 'bar',
+            });
+        });
+
+        const returnValue = await ExecutorHelper.run('ssh-host', 'foobar');
+        expect(returnValue).to.be.an('object');
+        expect(returnValue).to.have.property('returnCode', 2);
+        expect(exec.callCount).to.be.equal(1);
+
+        exec.restore();
+    });
+
+    it('should execute with an unspecific error', async function() {
+        const exec = sinon.stub(child_process, 'exec').callsFake((_arg, callback) => {
+            callback({}, {
+                stdout: 'foo',
+                stderr: 'bar',
+            });
+        });
+
+        const returnValue = await ExecutorHelper.run('ssh-host', 'foobar');
+        expect(returnValue).to.be.an('object');
+        expect(returnValue).to.have.property('returnCode', 1);
+        expect(exec.callCount).to.be.equal(1);
+
+        exec.restore();
     });
 });

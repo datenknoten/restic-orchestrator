@@ -6,6 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "coverage": "nyc mocha -r ts-node/register src/**/*.spec.ts",
     "lint": "tslint -p tsconfig.json",
     "start": "ts-node src/main.ts",
     "compile": "tsc -p tsconfig.json",
@@ -34,11 +35,33 @@
     "@types/fs-extra": "4.0.5",
     "@types/chai": "4.0.6",
     "@types/mocha": "2.2.44",
+    "@types/sinon": "4.0.0",
     "typescript": "2.6.1",
     "ts-node": "3.3.0",
     "tslint": "5.8.0",
     "nexe": "2.0.0-rc.22",
     "chai": "4.1.2",
-    "mocha": "4.0.1"
+    "mocha": "4.0.1",
+    "sinon": "4.1.2",
+    "nyc": "11.3.0"
+  },
+
+  "nyc": {
+    "check-coverage": true,
+    "all": true,
+    "lines": 10,
+    "extension": [
+      ".js",
+      ".ts"
+    ],
+    "include": [
+      "src/**/!(*.spec.*).[tj]s?(x)"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text-summary"
+    ],
+    "report-dir": "coverage"
   }
 }

@@ -21,6 +21,8 @@ describe('ExecutorHelper', function() {
     // const application = new ApplicationModel();
 
     describe('getConfigSchema', function() {
+        // tslint:disable-next-line:no-invalid-this
+        this.timeout(10000);
         /**
          * Checks a JSON-Schema object
          */

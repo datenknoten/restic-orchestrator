@@ -62,6 +62,9 @@
       "lcov",
       "text-summary"
     ],
+    "exclude": [
+      "src/interfaces"
+    ],
     "report-dir": "coverage"
   }
 }

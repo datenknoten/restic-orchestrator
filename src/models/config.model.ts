@@ -17,6 +17,7 @@ import {
     ConfigFileEmptyError,
     ConfigFileInvalidError,
     ConfigFileNotFoundError,
+    JSONSchemaNotFoundError,
 } from '../errors';
 
 /**
@@ -95,7 +96,7 @@ export class ConfigModel implements ConfigInterface {
                 const schema = JSON.parse(schemaContent);
                 return schema;
             } else {
-                throw new InvalidJSONSchemaError();
+                throw new JSONSchemaNotFoundError();
             }
         }
     }

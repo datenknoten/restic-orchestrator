@@ -17,7 +17,7 @@ import {
 import * as fse from 'fs-extra';
 
 
-describe.only('ExecutorHelper', function() {
+describe('ExecutorHelper', function() {
     // const application = new ApplicationModel();
 
     describe('getConfigSchema', function() {
@@ -25,13 +25,13 @@ describe.only('ExecutorHelper', function() {
          * Checks a JSON-Schema object
          */
         // tslint:disable-next-line:no-any
-        function checkSchema(schema: any) {
-            expect(schema).to.be.an('object');
-            expect(schema).to.have.property('type', 'object');
-            expect(schema.properties).to.be.an('object');
-            expect(Object.keys(schema).length).to.be.equal(5);
-            expect(schema.required).to.be.an('array');
-            expect(schema.required).to.have.property('length', 4);
+        function checkSchema(_schema: any) {
+            expect(_schema).to.be.an('object');
+            expect(_schema).to.have.property('type', 'object');
+            expect(_schema.properties).to.be.an('object');
+            expect(Object.keys(_schema).length).to.be.equal(5);
+            expect(_schema.required).to.be.an('array');
+            expect(_schema.required).to.have.property('length', 4);
         }
 
         // tslint:disable-next-line:no-any
@@ -48,7 +48,7 @@ describe.only('ExecutorHelper', function() {
                 return path.endsWith('config.schema.json');
             });
             const readFileStub = sinon.stub(fse, 'readFile');
-            readFileStub.callsFake(async() => JSON.stringify(schema));
+            readFileStub.callsFake(async () => JSON.stringify(schema));
 
             const _schema = await ConfigModel.getConfigSchema();
 

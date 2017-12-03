@@ -1,6 +1,12 @@
 /**
  * Error thrown if the config file is empty
  */
-export class ConfigFileEmptyError extends Error {
+
+import { BaseError } from '../errors';
+
+/**
+ * Will be thrown if the config is empty
+ */
+export class ConfigFileEmptyError extends BaseError {
 
 }

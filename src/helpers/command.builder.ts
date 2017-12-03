@@ -30,9 +30,9 @@ export class CommandBuilder {
     public arguments: string[] = [];
 
     /**
-     * Render the final command
+     * Render the given environment variables
      */
-    public render(): string {
+    private renderEnv(): string {
         let command = '';
 
         if (Object.keys(this.env).length > 0) {
@@ -41,12 +41,14 @@ export class CommandBuilder {
             }
         }
 
-        if (this.hasSudo) {
-            command += '/usr/bin/sudo --preserve-env ';
-        }
+        return command;
+    }
 
-        command += this.command;
-
+    /**
+     * Render the given options
+     */
+    private renderOptions(): string {
+        let command = '';
         if (this.options.length > 0) {
             for (const option of this.options) {
                 command += ` ${option.name}`;
@@ -62,11 +64,41 @@ export class CommandBuilder {
             }
         }
 
+        return command;
+    }
+
+    /**
+     * Renter the given arguments
+     */
+    private renderArguments(): string {
+        let command = '';
+
         if (this.arguments.length > 0) {
             for (const argument of this.arguments) {
                 command += ` "${argument.replace(/"/g, '\\"')}"`;
             }
         }
+
+        return command;
+    }
+
+    /**
+     * Render the final command
+     */
+    public render(): string {
+        let command = '';
+
+        command += this.renderEnv();
+
+        if (this.hasSudo) {
+            command += '/usr/bin/sudo --preserve-env ';
+        }
+
+        command += this.command;
+
+        command += this.renderOptions();
+
+        command += this.renderArguments();
 
         return command;
     }

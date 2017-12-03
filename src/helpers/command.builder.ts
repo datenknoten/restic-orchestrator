@@ -53,12 +53,11 @@ export class CommandBuilder {
             for (const option of this.options) {
                 command += ` ${option.name}`;
 
-                if (option.value) {
-                    if (option.useEqualSign) {
-                        command += '=';
-                    } else {
-                        command += ' ';
-                    }
+                if (option.value && option.useEqualSign) {
+                    command += '=';
+                    command += `"${option.value.replace(/"/g, '\\"')}"`;
+                } else if (option.value) {
+                    command += ' ';
                     command += `"${option.value.replace(/"/g, '\\"')}"`;
                 }
             }

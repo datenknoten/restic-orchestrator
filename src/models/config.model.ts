@@ -102,6 +102,28 @@ export class ConfigModel implements ConfigInterface {
     }
 
     /**
+     * Create a ConfigModel from JSON-data
+     */
+    // tslint:disable-next-line:no-any
+    private static serializeFromJson(item: any): ConfigModel {
+        const configItem = new ConfigModel();
+        configItem.user = item.user;
+        configItem.needsSudo = item.needsSudo;
+        configItem.host = item.host;
+
+        configItem.backupPassword = item.backupPassword;
+        configItem.repository = item.repository;
+        configItem.files = item.files;
+        configItem.exclude = item.exclude;
+        configItem.env = item.env;
+
+        configItem.preCommand = item.preCommand;
+        configItem.postCommand = item.postCommand;
+
+        return configItem;
+    }
+
+    /**
  * Loads the config from configuration file and returns it
  */
     public static async getConfig(configFilePath?: string): Promise<ConfigModel[]> {
@@ -147,19 +169,8 @@ export class ConfigModel implements ConfigInterface {
                     }
                     throw error;
                 }
-                const configItem = new ConfigModel();
-                configItem.user = item.user;
-                configItem.needsSudo = item.needsSudo;
-                configItem.host = item.host;
+                const configItem = ConfigModel.serializeFromJson(item);
 
-                configItem.backupPassword = item.backupPassword;
-                configItem.repository = item.repository;
-                configItem.files = item.files;
-                configItem.exclude = item.exclude;
-                configItem.env = item.env;
-
-                configItem.preCommand = item.preCommand;
-                configItem.postCommand = item.postCommand;
                 returnValue.push(configItem);
             }
         } catch (e) {

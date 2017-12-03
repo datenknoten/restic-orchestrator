@@ -20,17 +20,17 @@ import {
 import * as fse from 'fs-extra';
 
 
-describe('ExecutorHelper', function () {
+describe('ExecutorHelper', function() {
     // const application = new ApplicationModel();
 
-    describe('getConfigSchema', function () {
+    describe('getConfigSchema', function() {
         // tslint:disable-next-line:no-invalid-this
         this.timeout(10000);
         /**
          * Checks a JSON-Schema object
          */
         // tslint:disable-next-line:no-any
-        function checkSchema (_schema: any) {
+        function checkSchema(_schema: any) {
             expect(_schema).to.be.an('object');
             expect(_schema).to.have.property('type', 'object');
             expect(_schema.properties).to.be.an('object');
@@ -41,13 +41,13 @@ describe('ExecutorHelper', function () {
 
         // tslint:disable-next-line:no-any
         let schema: any;
-        it('should generate a schema with access to the interface', async function () {
+        it('should generate a schema with access to the interface', async function() {
             schema = await ConfigModel.getConfigSchema();
 
             checkSchema(schema);
         });
 
-        it('should generate a schema without access to the interface', async function () {
+        it('should generate a schema without access to the interface', async function() {
             const pathExistsStub = sinon.stub(fse, 'pathExists');
             pathExistsStub.callsFake(async (path: string) => {
                 return path.endsWith('config.schema.json');
@@ -62,7 +62,7 @@ describe('ExecutorHelper', function () {
             readFileStub.restore();
         });
 
-        it('should throw an error if no schema could be found', async function () {
+        it('should throw an error if no schema could be found', async function() {
             const pathExistsStub = sinon.stub(fse, 'pathExists');
             pathExistsStub.callsFake(async () => {
                 return false;
@@ -79,8 +79,8 @@ describe('ExecutorHelper', function () {
         });
     });
 
-    describe('getConfig', function () {
-        it('should convert a config file into ConfigModel instances', async function () {
+    describe('getConfig', function() {
+        it('should convert a config file into ConfigModel instances', async function() {
             const pathExistsStub = sinon.stub(fse, 'pathExists');
             pathExistsStub.callsFake(async () => {
                 return true;
@@ -123,7 +123,7 @@ describe('ExecutorHelper', function () {
             pathExistsStub.restore();
         });
 
-        it('should fail with an empty config', async function () {
+        it('should fail with an empty config', async function() {
             const pathExistsStub = sinon.stub(fse, 'pathExists');
             pathExistsStub.callsFake(async () => {
                 return true;
@@ -143,7 +143,7 @@ describe('ExecutorHelper', function () {
             pathExistsStub.restore();
         });
 
-        it('should fail without a config', async function () {
+        it('should fail without a config', async function() {
             const pathExistsStub = sinon.stub(fse, 'pathExists');
             pathExistsStub.callsFake(async () => {
                 return false;

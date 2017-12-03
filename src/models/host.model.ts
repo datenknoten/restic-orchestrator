@@ -29,19 +29,6 @@ export class HostModel {
     }
 
     /**
-     * Runs the command before the backup
-     */
-    public async preRun() {
-        if (this.config.preCommand) {
-            await ExecutorHelper.run(
-                this.config.host,
-                this.config.preCommand,
-                this.config.user,
-            );
-        }
-    }
-
-    /**
      * Put the password file on the remote server
      */
     private async putPasswort(): Promise<void> {
@@ -109,16 +96,39 @@ export class HostModel {
     }
 
     /**
+     * run a speific hook
+     */
+    private async runHook(hookType: 'pre' | 'post') {
+        let command: string | undefined;
+        if (hookType === 'pre') {
+            command = this.config.preCommand;
+        } else if (hookType === 'post') {
+            command = this.config.postCommand;
+        }
+
+        if (!command) {
+            return;
+        }
+
+        await ExecutorHelper.run(
+            this.config.host,
+            command,
+            this.config.user,
+        );
+    }
+
+    /**
+     * Runs the command before the backup
+     */
+    public async preRun() {
+        await this.runHook('pre');
+    }
+
+    /**
      * Runs the command after the backup
      */
     public async postRun() {
-        if (this.config.postCommand) {
-            await ExecutorHelper.run(
-                this.config.host,
-                this.config.postCommand,
-                this.config.user,
-            );
-        }
+        await this.runHook('post');
     }
 
     /**

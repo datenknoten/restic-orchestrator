@@ -124,20 +124,29 @@ export class ConfigModel implements ConfigInterface {
     }
 
     /**
- * Loads the config from configuration file and returns it
- */
+     * Returns the default file path for the config file
+     */
+    private static get defaultConfigFilePath(): string {
+        const dirs = new appDirectory({
+            appName: 'restic-orchestrator',
+            appAuthor: 'datenknoten',
+            useRoaming: true,
+        });
+        return path.join(dirs.userData(), 'config.json');
+    }
+
+    /**
+     * Loads the config from configuration file and returns it
+     */
     public static async getConfig(configFilePath?: string): Promise<ConfigModel[]> {
         if (!configFilePath) {
-            const dirs = new appDirectory({
-                appName: 'restic-orchestrator',
-                appAuthor: 'datenknoten',
-                useRoaming: true,
-            });
-            configFilePath = path.join(dirs.userData(), 'config.json');
+            configFilePath = ConfigModel.defaultConfigFilePath;
         }
+
         if (!(await fse.pathExists(configFilePath))) {
             throw new ConfigFileNotFoundError();
         }
+
         const configFile = await fse.readFile(configFilePath, 'utf-8');
 
         if (configFile.length === 0) {

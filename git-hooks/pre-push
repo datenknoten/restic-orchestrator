@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+npm run lint
+npm run compile
+npm run test

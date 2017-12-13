@@ -25,7 +25,6 @@ jobs:
     - stage: install
       script:
         - npm install
-        - cp monkey-patch/caporal/index.d.ts node_modules/caporal/index.d.ts
     - stage: test
       script:
         - npm run lint

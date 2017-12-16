@@ -30,8 +30,6 @@ jobs:
         - npm run lint
         - npm run test
         - npm run compile
-        - mkdir -p dist/schema
-        - npm run generate-config-schema
     - stage: coverage
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

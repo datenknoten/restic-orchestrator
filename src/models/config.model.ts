@@ -168,14 +168,19 @@ export class ConfigModel implements ConfigInterface {
                 error.reason = 'Config is not an Array';
                 throw error;
             }
+
             const ajv = new Ajv();
+
             for (const item of config) {
                 const isValid = ajv.validate(configSchema, item);
+
                 if (!isValid) {
                     const error = new ConfigFileInvalidError();
+
                     if (ajv.errors) {
                         error.reason = ajv.errors;
                     }
+
                     throw error;
                 }
                 const configItem = ConfigModel.serializeFromJson(item);

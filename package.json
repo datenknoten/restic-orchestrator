@@ -8,8 +8,8 @@
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test && npm run compile",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "coverage": "nyc mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "mocha --bail -r ts-node/register src/**/*.spec.ts",
+    "coverage": "nyc mocha --bail -r ts-node/register src/**/*.spec.ts",
     "lint": "tslint -p tsconfig.json",
     "start": "ts-node src/main.ts",
     "compile": "tsc -p tsconfig.json",
@@ -25,12 +25,11 @@
   "author": "Tim Schumacher",
   "license": "Apache-2.0",
   "dependencies": {
-    "ajv": "^5.5.1",
     "appdirectory": "0.1.0",
     "caporal": "^0.9.0",
     "fs-extra": "^5.0.0",
-    "typescript-json-schema": "^0.20.0",
-    "winston": "^2.4.0"
+    "winston": "^2.4.0",
+    "class-validator": "^0.7.3"
   },
   "devDependencies": {
     "@types/node": "^8.0.58",

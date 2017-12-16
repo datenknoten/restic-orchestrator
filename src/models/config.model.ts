@@ -1,23 +1,25 @@
 /**
  * Third party imports
  */
-import * as TJS from 'typescript-json-schema';
 import * as path from 'path';
 import * as fse from 'fs-extra';
 const appDirectory = require('appdirectory');
-import * as Ajv from 'ajv';
 
+import {
+    IsString,
+    IsOptional,
+    IsBoolean,
+    validate,
+} from 'class-validator';
 
 /**
  * Own imports
  */
 import {ConfigInterface, EnvironmentInterface} from '../interfaces';
 import {
-    InvalidJSONSchemaError,
     ConfigFileEmptyError,
     ConfigFileInvalidError,
     ConfigFileNotFoundError,
-    JSONSchemaNotFoundError,
 } from '../errors';
 
 /**
@@ -27,79 +29,62 @@ export class ConfigModel implements ConfigInterface {
     /**
      * Password for the backup encryption
      */
+    @IsString()
     backupPassword: string;
     /**
      * Where the backup is stored
      */
+    @IsString()
     repository: string;
     /**
      * What should be backuped
      */
+    @IsString({
+        each: true,
+    })
     files: string[];
     /**
      * Exclude files
      */
+    @IsString({
+        each: true,
+    })
+    @IsOptional()
     exclude?: string[];
     /**
      * Additional env vars, for cloud storage for example
      */
+    @IsOptional()
     env?: EnvironmentInterface;
     /**
      * The user to SSH into the host
      */
+    @IsString()
+    @IsOptional()
     user?: string;
     /**
      * If we need to prepend sudo to the command
      */
+    @IsBoolean()
+    @IsOptional()
     needsSudo?: boolean;
     /**
      * The host to SSH into
      */
+    @IsString()
     host: string;
     /**
      * Execute a command before the backup is executed, f.e. run a database dump
      */
+    @IsString()
+    @IsOptional()
     preCommand?: string;
     /**
      * Execute a command after the backup is finished
      */
+    @IsString()
+    @IsOptional()
     postCommand?: string;
-
-    /**
-     * Returns the config schema
-     */
-    // tslint:disable-next-line:no-any
-    public static async getConfigSchema(): Promise<any> {
-        const interfaceFile = path.resolve(__dirname, '..', 'interfaces', 'config.interface.ts');
-        if (await fse.pathExists(interfaceFile)) {
-            const settings: TJS.PartialArgs = {
-                required: true,
-            };
-
-            const compilerOptions: TJS.CompilerOptions = {
-                strictNullChecks: true,
-            };
-
-            const program = TJS.getProgramFromFiles([interfaceFile], compilerOptions);
-
-            const schema = TJS.generateSchema(program, 'ConfigInterface', settings);
-
-            if (schema) {
-                return schema;
-            } else {
-                throw new InvalidJSONSchemaError();
-            }
-        } else {
-            const schemaFile = path.resolve(__dirname, '..', 'schema', 'config.schema.json');
-            if (await fse.pathExists(schemaFile)) {
-                const schemaContent = await fse.readFile(schemaFile, 'utf-8');
-                const schema = JSON.parse(schemaContent);
-                return schema;
-            } else {
-                throw new JSONSchemaNotFoundError();
-            }
-        }
-    }
 
     /**
      * Create a ConfigModel from JSON-data
@@ -155,10 +140,6 @@ export class ConfigModel implements ConfigInterface {
 
         let config: ConfigInterface[] = [];
 
-        const configSchema = await ConfigModel.getConfigSchema();
-
-        delete configSchema['$schema'];
-
         const returnValue: ConfigModel[] = [];
 
         try {
@@ -169,21 +150,16 @@ export class ConfigModel implements ConfigInterface {
                 throw error;
             }
 
-            const ajv = new Ajv();
-
             for (const item of config) {
-                const isValid = ajv.validate(configSchema, item);
+                const configItem = ConfigModel.serializeFromJson(item);
 
-                if (!isValid) {
+                const validationErrors = await validate(configItem);
+
+                if (validationErrors.length > 0) {
                     const error = new ConfigFileInvalidError();
-
-                    if (ajv.errors) {
-                        error.reason = ajv.errors;
-                    }
-
+                    error.reason = validationErrors;
                     throw error;
                 }
-                const configItem = ConfigModel.serializeFromJson(item);
 
                 returnValue.push(configItem);
             }

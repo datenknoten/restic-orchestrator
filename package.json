@@ -29,7 +29,7 @@
     "caporal": "^0.9.0",
     "fs-extra": "^5.0.0",
     "winston": "^2.4.0",
-    "class-validator": "^0.7.3"
+    "class-validator": "^0.8.1"
   },
   "devDependencies": {
     "@types/node": "^8.0.58",

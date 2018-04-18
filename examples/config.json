@@ -1,0 +1,26 @@
+[
+    {
+        "user": "restic",
+        "host": "web.int.datenknoten.me",
+        "needsSudo": true,
+        "backupPassword": "z3kr3t",
+        "repository": "/srv/backup/restic/web.int.datenknoten.me",
+        "files": [
+            "/etc",
+            "/srv",
+            "/opt"
+        ]
+    },
+    {
+        "user": "restic",
+        "host": "ldap.int.datenknoten.me",
+        "needsSudo": true,
+        "backupPassword": "z3kr3t",
+        "repository": "/srv/backup/restic/ldap.int.datenknoten.me",
+        "preCommand": "sudo -u root sh -c '/usr/sbin/slapcat -b dc=datenknoten,dc=me > /srv/backup/ldap/dump.ldiff'",
+        "files": [
+            "/srv/backup/ldap",
+            "/etc"
+        ]
+    }
+]

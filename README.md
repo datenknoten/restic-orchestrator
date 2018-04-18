@@ -1,6 +1,6 @@
 # restic orchestrator
 
-With [restic]() you can do fine backups on individual hosts. With
+With [restic](https://restic.net/) you can do fine backups on individual hosts. With
 restic orchestrator you can do that on multiple hosts.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/datenknoten/restic-orchestrator.svg)](https://greenkeeper.io/)
@@ -50,7 +50,4 @@ $ npm run test
 $ npm run compile
 ```
 
-In the
-[git-hooks](https://github.com/datenknoten/restic-orchestrator/tree/develop/git-hooks)
-directory are also some git hooks you can install to enforce better
-working conditions.
+This package uses [husky](https://github.com/typicode/husky) to execute git hooks, to make you produce great code more easy.

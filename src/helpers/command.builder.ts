@@ -10,7 +10,7 @@ export class CommandBuilder {
     /**
      * The command that gets executed
      */
-    public command: string;
+    public command!: string;
     /**
      * Optional environment variables
      */

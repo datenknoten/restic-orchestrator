@@ -7,5 +7,5 @@ export class ConfigFileInvalidError extends BaseError {
     /**
      * The reason the config file is invalid
      */
-    public reason: {};
+    public reason?: {} = {};
 }

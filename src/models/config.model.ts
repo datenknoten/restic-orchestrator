@@ -30,19 +30,19 @@ export class ConfigModel implements ConfigInterface {
      * Password for the backup encryption
      */
     @IsString()
-    backupPassword: string;
+    backupPassword!: string;
     /**
      * Where the backup is stored
      */
     @IsString()
-    repository: string;
+    repository!: string;
     /**
      * What should be backuped
      */
     @IsString({
         each: true,
     })
-    files: string[];
+    files!: string[];
     /**
      * Exclude files
      */
@@ -72,7 +72,7 @@ export class ConfigModel implements ConfigInterface {
      * The host to SSH into
      */
     @IsString()
-    host: string;
+    host!: string;
     /**
      * Execute a command before the backup is executed, f.e. run a database dump
      */

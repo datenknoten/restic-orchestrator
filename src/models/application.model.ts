@@ -1,7 +1,7 @@
 /** Third Party imports */
 import * as winston from 'winston';
 import * as path from 'path';
-import _caporal from 'caporal';
+import * as caporal from 'caporal';
 const appDirectory = require('appdirectory');
 
 /** Own Code */
@@ -20,10 +20,6 @@ import {
 import {
     ExecutorHelper,
 } from '../helpers';
-
-/** Caporal typing setup */
-type caporalClass = typeof _caporal;
-const caporal: caporalClass = require('caporal');
 
 interface ArgType {
     // tslint:disable-next-line:no-any

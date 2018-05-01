@@ -27,7 +27,7 @@
   "dependencies": {
     "appdirectory": "0.1.0",
     "caporal": "^0.10.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "winston": "^2.4.1",
     "class-validator": "^0.8.5"
   },

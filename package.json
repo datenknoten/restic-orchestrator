@@ -28,7 +28,7 @@
     "appdirectory": "0.1.0",
     "caporal": "^0.10.0",
     "fs-extra": "^5.0.0",
-    "winston": "^2.4.1",
+    "winston": "^3.0.0",
     "class-validator": "^0.8.5"
   },
   "devDependencies": {

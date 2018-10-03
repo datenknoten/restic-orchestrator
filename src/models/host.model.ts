@@ -217,10 +217,6 @@ export class HostModel {
      * clean up unneeded stuff
      */
     public async cleanup() {
-        if (!(typeof this.config.keepLastSnapshots === 'number')) {
-            return;
-        }
-
         await this.putPasswort();
 
         const restic = new CommandBuilder();

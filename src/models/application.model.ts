@@ -36,6 +36,11 @@ export class ApplicationModel {
     private logger: winston.Logger;
 
     /**
+     * Indicate if we want to do a dry run
+     */
+    public dryRun: boolean = false;
+
+    /**
      * Return a logger
      */
     public getLogger(): winston.Logger {
@@ -88,6 +93,9 @@ export class ApplicationModel {
         try {
             const args = await this.getArgs();
             if (args) {
+                if (typeof args.dryRun === 'boolean') {
+                    this.dryRun = args.dryRun;
+                }
                 if (args.verbose) {
                     this.logger.level = 'verbose';
                 }

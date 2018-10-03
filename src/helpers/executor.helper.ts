@@ -1,8 +1,8 @@
 import {
     ExecutorResultInterface,
 } from '../interfaces';
-import {ApplicationModel} from '../models';
-import {CommandBuilder} from '../helpers';
+import { ApplicationModel } from '../models';
+import { CommandBuilder } from '../helpers';
 import * as child_process from 'child_process';
 import * as util from 'util';
 
@@ -55,9 +55,11 @@ export abstract class ExecutorHelper {
         };
 
         try {
-            const results = await exec(command);
-            returnValue.stdout = results.stdout;
-            returnValue.stderr = results.stderr;
+            if (ExecutorHelper.application.dryRun === false) {
+                const results = await exec(command);
+                returnValue.stdout = results.stdout;
+                returnValue.stderr = results.stderr;
+            }
         } catch (error) {
             if (error.code) {
                 returnValue.returnCode = error.code;

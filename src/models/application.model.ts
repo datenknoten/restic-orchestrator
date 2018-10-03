@@ -33,17 +33,21 @@ export class ApplicationModel {
     /**
      * The internal reference to the logger
      */
-    private logger: winston.LoggerInstance;
+    private logger: winston.Logger;
 
     /**
      * Return a logger
      */
-    public getLogger(): winston.LoggerInstance {
+    public getLogger(): winston.Logger {
         return this.logger;
     }
 
     constructor() {
-        this.logger = winston.cli();
+        this.logger = winston.createLogger({
+            transports: [
+                new winston.transports.Console(),
+            ],
+        });
         this.logger.level = 'info';
         ExecutorHelper.application = this;
     }

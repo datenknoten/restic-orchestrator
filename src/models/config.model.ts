@@ -109,6 +109,7 @@ export class ConfigModel implements ConfigInterface {
         configItem.files = item.files;
         configItem.exclude = item.exclude;
         configItem.env = item.env;
+        configItem.keepLastSnapshots = item.keepLastSnapshots;
 
         configItem.preCommand = item.preCommand;
         configItem.postCommand = item.postCommand;

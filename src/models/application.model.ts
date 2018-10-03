@@ -68,10 +68,12 @@ export class ApplicationModel {
                 .argument('command', 'Run specific command. Allowed values are: init, backup', ['init', 'backup'], 'backup')
                 .option('--dry-run', 'Do not run restic, just print the command')
                 .option('--config', `Specify another config file. Default is ${path.join(dirs.userData(), 'config.json')}`)
-                .option('--verbose', 'Set the logger to debug')
+                .option('--verbose', 'Set the logger to verbose')
+                .option('--debug', 'Set the logger to debug')
                 .action((args, options, _logger) => {
                     args.dryRun = !!options.dryRun;
                     args.verbose = !!options.verbose;
+                    args.debug = !!options.debug;
                     resolve(args);
                 });
 
@@ -87,6 +89,9 @@ export class ApplicationModel {
             const args = await this.getArgs();
             if (args) {
                 if (args.verbose) {
+                    this.logger.level = 'verbose';
+                }
+                if (args.debug) {
                     this.logger.level = 'debug';
                 }
             }
@@ -95,9 +100,12 @@ export class ApplicationModel {
                 for (const item of config) {
                     const host = new HostModel(item, this);
                     if (args.command === 'backup') {
+                        this.logger.verbose(`Creating backup for ${host.config.host}`);
                         await host.preRun();
+                        this.logger.verbose('Starting actual backup');
                         await host.run();
                         await host.postRun();
+                        this.logger.verbose('Cleaning up old backups');
                         await host.forget();
                         await host.cleanup();
                     } else if (args.command === 'init') {

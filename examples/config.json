@@ -5,6 +5,7 @@
         "needsSudo": true,
         "backupPassword": "z3kr3t",
         "repository": "/srv/backup/restic/web.int.datenknoten.me",
+        "keepLastSnapshots": 30,
         "files": [
             "/etc",
             "/srv",
@@ -18,6 +19,7 @@
         "backupPassword": "z3kr3t",
         "repository": "/srv/backup/restic/ldap.int.datenknoten.me",
         "preCommand": "sudo -u root sh -c '/usr/sbin/slapcat -b dc=datenknoten,dc=me > /srv/backup/ldap/dump.ldiff'",
+        "keepLastSnapshots": 30,
         "files": [
             "/srv/backup/ldap",
             "/etc"

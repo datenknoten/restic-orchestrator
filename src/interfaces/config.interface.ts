@@ -13,4 +13,5 @@ export interface ConfigInterface {
     // operational stuff
     preCommand?: string;
     postCommand?: string;
+    keepLastSnapshots?: number;
 }

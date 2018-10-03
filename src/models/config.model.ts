@@ -10,6 +10,7 @@ import {
     IsOptional,
     IsBoolean,
     validate,
+    IsInt,
 } from 'class-validator';
 
 /**
@@ -85,6 +86,13 @@ export class ConfigModel implements ConfigInterface {
     @IsString()
     @IsOptional()
     postCommand?: string;
+
+    /**
+     * Amount of snapshots to keep
+     */
+    @IsInt()
+    @IsOptional()
+    keepLastSnapshots?: number;
 
     /**
      * Create a ConfigModel from JSON-data

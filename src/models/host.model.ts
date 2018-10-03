@@ -167,5 +167,91 @@ export class HostModel {
         await this.releasePassword();
     }
 
+    /**
+     * clean up old backups
+     */
+    public async forget() {
+        if (!(typeof this.config.keepLastSnapshots === 'number')) {
+            return;
+        }
+
+        await this.putPasswort();
+
+        const restic = new CommandBuilder();
+        restic.hasSudo = this.config.needsSudo ? true : false;
+
+        restic.command = '/usr/local/bin/restic';
+
+        restic.options.push({
+            name: '--password-file',
+            value: '/tmp/backup-password',
+            useEqualSign: false,
+        });
+
+        restic.options.push({
+            name: '--repo',
+            value: this.config.repository,
+            useEqualSign: false,
+        });
+
+        restic.options.push({
+            name: '--keep-last',
+            value: this.config.keepLastSnapshots.toString(),
+            useEqualSign: false,
+        });
+
+        restic.arguments.push('forget');
+
+        Object.assign(restic.env, this.config.env);
+
+        await ExecutorHelper.run(
+            this.config.host,
+            restic.render(),
+            this.config.user,
+        );
+
+        await this.releasePassword();
+    }
+
+    /**
+     * clean up unneeded stuff
+     */
+    public async cleanup() {
+        if (!(typeof this.config.keepLastSnapshots === 'number')) {
+            return;
+        }
+
+        await this.putPasswort();
+
+        const restic = new CommandBuilder();
+        restic.hasSudo = this.config.needsSudo ? true : false;
+
+        restic.command = '/usr/local/bin/restic';
+
+        restic.options.push({
+            name: '--password-file',
+            value: '/tmp/backup-password',
+            useEqualSign: false,
+        });
+
+        restic.options.push({
+            name: '--repo',
+            value: this.config.repository,
+            useEqualSign: false,
+        });
+
+        restic.arguments.push('prune');
+
+        Object.assign(restic.env, this.config.env);
+
+        await ExecutorHelper.run(
+            this.config.host,
+            restic.render(),
+            this.config.user,
+        );
+
+        await this.releasePassword();
+    }
+
 
 }

@@ -98,6 +98,8 @@ export class ApplicationModel {
                         await host.preRun();
                         await host.run();
                         await host.postRun();
+                        await host.forget();
+                        await host.cleanup();
                     } else if (args.command === 'init') {
                         await host.init();
                     }

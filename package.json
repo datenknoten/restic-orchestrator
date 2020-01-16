@@ -45,7 +45,7 @@
     "husky": "^1.1.0",
     "tslint-language-service": "0.9.9",
     "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^7.1.2"
+    "@commitlint/config-conventional": "^8.3.4"
   },
   "nyc": {
     "check-coverage": true,
